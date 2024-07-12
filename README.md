@@ -112,3 +112,213 @@ For any questions or feedback, please reach out to your-email@example.com.
 ### Acknowledgements
 
 - This project is inspired by standard ERP system features and is built for educational purposes.
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP System Class Diagram</title>
+    <style>
+        .class-box {
+            border: 1px solid #000;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .class-box h2 {
+            margin: 0;
+            font-size: 16px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #000;
+            padding: 5px;
+        }
+        .class-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .relationship {
+            margin: 10px 0;
+        }
+        .relationship div {
+            display: inline-block;
+            width: 30%;
+            text-align: center;
+        }
+        .arrow {
+            display: inline-block;
+            width: 30%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Diagram for ERP System</h1>
+    <div class="class-box">
+        <h2>Battery</h2>
+        <ul>
+            <li>+ battery_id</li>
+            <li>+ status</li>
+            <li>+ quantity</li>
+            <li>+ storage_conditions</li>
+            <li>+ update_status()</li>
+            <li>+ check_conditions()</li>
+            <li>+ track_entry_exit()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>Supplier</h2>
+        <ul>
+            <li>+ supplier_id</li>
+            <li>+ name</li>
+            <li>+ contact_info</li>
+            <li>+ performance_rating</li>
+            <li>+ add_supplier()</li>
+            <li>+ update_supplier()</li>
+            <li>+ track_order_delivery()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>Order</h2>
+        <ul>
+            <li>+ order_id</li>
+            <li>+ battery_id</li>
+            <li>+ supplier_id</li>
+            <li>+ order_date</li>
+            <li>+ delivery_date</li>
+            <li>+ status</li>
+            <li>+ place_order()</li>
+            <li>+ update_order_status()</li>
+            <li>+ track_delivery()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>RemanufacturingProcess</h2>
+        <ul>
+            <li>+ process_id</li>
+            <li>+ battery_id</li>
+            <li>+ start_date</li>
+            <li>+ end_date</li>
+            <li>+ status</li>
+            <li>+ schedule_process()</li>
+            <li>+ track_progress()</li>
+            <li>+ ensure_compliance()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>RecyclingProcess</h2>
+        <ul>
+            <li>+ process_id</li>
+            <li>+ battery_id</li>
+            <li>+ start_date</li>
+            <li>+ end_date</li>
+            <li>+ status</li>
+            <li>+ plan_process()</li>
+            <li>+ track_progress()</li>
+            <li>+ ensure_compliance()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>QualityControl</h2>
+        <ul>
+            <li>+ qc_id</li>
+            <li>+ battery_id</li>
+            <li>+ inspection_date</li>
+            <li>+ results</li>
+            <li>+ issues</li>
+            <li>+ perform_inspection()</li>
+            <li>+ maintain_records()</li>
+            <li>+ address_issues()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>Report</h2>
+        <ul>
+            <li>+ report_id</li>
+            <li>+ report_type</li>
+            <li>+ generated_date</li>
+            <li>+ data</li>
+            <li>+ generate_report()</li>
+            <li>+ view_report()</li>
+            <li>+ analyze_data()</li>
+        </ul>
+    </div>
+    <div class="class-box">
+        <h2>User</h2>
+        <ul>
+            <li>+ user_id</li>
+            <li>+ username</li>
+            <li>+ password</li>
+            <li>+ role</li>
+            <li>+ login()</li>
+            <li>+ logout()</li>
+            <li>+ access_data()</li>
+        </ul>
+    </div>
+
+    <div class="relationship">
+        <div>Battery</div>
+        <div class="arrow">-&gt;</div>
+        <div>QualityControl</div>
+    </div>
+    <div class="relationship">
+        <div>Supplier</div>
+        <div class="arrow">-&gt;</div>
+        <div>Battery</div>
+    </div>
+    <div class="relationship">
+        <div>Order</div>
+        <div class="arrow">-&gt;</div>
+        <div>Battery</div>
+    </div>
+    <div class="relationship">
+        <div>Order</div>
+        <div class="arrow">-&gt;</div>
+        <div>Supplier</div>
+    </div>
+    <div class="relationship">
+        <div>Battery</div>
+        <div class="arrow">-&gt;</div>
+        <div>RemanufacturingProcess</div>
+    </div>
+    <div class="relationship">
+        <div>Battery</div>
+        <div class="arrow">-&gt;</div>
+        <div>RecyclingProcess</div>
+    </div>
+    <div class="relationship">
+        <div>Report</div>
+        <div class="arrow">-&gt;</div>
+        <div>Battery</div>
+    </div>
+    <div class="relationship">
+        <div>Report</div>
+        <div class="arrow">-&gt;</div>
+        <div>Supplier</div>
+    </div>
+    <div class="relationship">
+        <div>Report</div>
+        <div class="arrow">-&gt;</div>
+        <div>RemanufacturingProcess</div>
+    </div>
+    <div class="relationship">
+        <div>Report</div>
+        <div class="arrow">-&gt;</div>
+        <div>RecyclingProcess</div>
+    </div>
+    <div class="relationship">
+        <div>Report</div>
+        <div class="arrow">-&gt;</div>
+        <div>QualityControl</div>
+    </div>
+    <div class="relationship">
+        <div>User</div>
+        <div class="arrow">-&gt;</div>
+        <div>Report</div>
+    </div>
+</body>
+</html>
+```

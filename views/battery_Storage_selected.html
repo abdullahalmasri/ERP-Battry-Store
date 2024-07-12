@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Batteries</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -41,6 +41,7 @@
             right: 0;
             left: auto;
         }
+
         .dropdown-menu .dropdown-item {
             color: blue;
         }
@@ -58,7 +59,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/dashboard/{{ username }}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#about">About Us</a>
@@ -97,87 +98,43 @@
 
 <div class="container mt-5">
     <div class="jumbotron text-center">
-        <h1 class="display-4">Welcome, {{ username }}!</h1>
-        <p class="lead">{{ message }}</p>
-        <hr class="my-4">
-        <p>Use the navigation bar to explore the different sections of the ERP system.</p>
+        <h1 class="display-4">Battery Storage</h1>
     </div>
-
     <div class="row">
-        <!-- Battery Card -->
+        {% for battery in batteries %}
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Battery</h5>
-                    <p class="card-text">Manage battery details including status, quantity, and storage conditions.</p>
-                    <a href="/batteries?username={{ username }}" class="btn btn-primary">Go to Batteries</a>
+                    <h5 class="card-title">Battery ID: {{ battery.battery_id }}</h5>
+                    <p class="card-text">Status: {{ battery.status }}</p>
+                    <p class="card-text">Quantity: {{ battery.quantity }}</p>
+                    <p class="card-text">Storage Conditions: {{ battery.storage_conditions }}</p>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#batteryModal" onclick="loadBatteryDetails('{{ battery.battery_id }}')">Describe</button>
                 </div>
             </div>
         </div>
-        <!-- Supplier Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Supplier</h5>
-                    <p class="card-text">Manage suppliers, track performance, and update supplier information.</p>
-                    <a href="/suppliers?username={{ username }}" class="btn btn-primary">Go to Suppliers</a>
-                </div>
-            </div>
-        </div>
-        <!-- Order Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Order</h5>
-                    <p class="card-text">Manage orders including placing, updating, and tracking delivery status.</p>
-                    <a href="/orders?username={{ username }}" class="btn btn-primary">Go to Orders</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+</div>
 
-    <div class="row">
-        <!-- Remanufacturing Process Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Remanufacturing</h5>
-                    <p class="card-text">Schedule and track remanufacturing processes and ensure compliance.</p>
-                    <a href="/remanufacturing_processes?username={{ username }}" class="btn btn-primary">Go to Remanufacturing</a>
-                </div>
+<!-- Modal -->
+<div class="modal fade" id="batteryModal" tabindex="-1" role="dialog" aria-labelledby="batteryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="batteryModalLabel">Battery Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-        <!-- Recycling Process Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Recycling</h5>
-                    <p class="card-text">Plan and track recycling processes and ensure compliance.</p>
-                    <a href="/recycling_processes?username={{ username }}" class="btn btn-primary">Go to Recycling</a>
-                </div>
+            <div class="modal-body">
+                <p><strong>Status:</strong> <span id="batteryStatus"></span></p>
+                <p><strong>Quantity:</strong> <span id="batteryQuantity"></span></p>
+                <p><strong>Storage Conditions:</strong> <span id="batteryStorage"></span></p>
+                <p><strong>Description:</strong> Detailed information about the battery, including specifications, usage, and other relevant details.</p>
             </div>
-        </div>
-        <!-- Quality Control Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Quality Control</h5>
-                    <p class="card-text">Perform inspections, maintain records, and address quality issues.</p>
-                    <a href="/inspections?username={{ username }}" class="btn btn-primary">Go to Inspections</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Report Card -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Reports</h5>
-                    <p class="card-text">Generate, view, and analyze reports for various processes and data.</p>
-                    <a href="/reports?username={{ username }}" class="btn btn-primary">Go to Reports</a>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -186,5 +143,19 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function loadBatteryDetails(batteryId) {
+        $.ajax({
+            url: '/batteries/' + batteryId,
+            method: 'GET',
+            success: function(response) {
+                $('#batteryModalLabel').text('Battery ID: ' + response.battery_id);
+                $('#batteryStatus').text(response.status);
+                $('#batteryQuantity').text(response.quantity);
+                $('#batteryStorage').text(response.storage_conditions);
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -1,3 +1,6 @@
+from flask import render_template
+
+
 def render_supplier_details(supplier):
     return f"""
     <html>
@@ -11,14 +14,6 @@ def render_supplier_details(supplier):
     </html>
     """
 
-def render_all_suppliers(suppliers):
-    supplier_list = "".join([f"<li>{supplier.supplier_id} - {supplier.name}</li>" for supplier in suppliers])
-    return f"""
-    <html>
-    <head><title>All Suppliers</title></head>
-    <body>
-        <h1>All Suppliers</h1>
-        <ul>{supplier_list}</ul>
-    </body>
-    </html>
-    """
+
+def render_all_suppliers(suppliers, username):
+    return render_template('supplier_template.html', suppliers=suppliers, username=username)

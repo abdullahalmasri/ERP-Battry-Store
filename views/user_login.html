@@ -4,68 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css"/>
+    <link rel="shortcut icon" href="https://icon-library.com/images/full-battery-icon/full-battery-icon-7.jpg">
+
 </head>
 <body>
-    <!-- Section: Design Block -->
-    <section class="text-center">
-        <!-- Background image -->
-        <div class="p-5 bg-image" style="
+<!-- Section: Design Block -->
+<section class="text-center">
+    <!-- Background image -->
+    <div class="p-5 bg-image" style="
             background-image: url('https://delta-q.com/wp-content/uploads/2024/02/AdobeStock_499670183-scaled.jpeg');
             height: 400px;
             "></div>
-        <!-- Background image -->
+    <!-- Background image -->
 
-        <div class="card mx-auto shadow-5-strong bg-body-tertiary" style="
+    <div class="card mx-auto shadow-5-strong bg-body-tertiary" style="
             margin-top: -100px;
             backdrop-filter: blur(30px);
             width: 40%; /* Adjust width as needed */
             ">
-            <div class="card-body p-5">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-12">
-                        <h2 class="fw-bold mb-5">Sign in now</h2>
-                        <form method="post" action="/login">
-                            <!-- Username input -->
-                            <div class="row">
-                                <div class="col-md-12 mb-4">
-                                    <div data-mdb-input-init class="form-outline">
-                                        <input type="text" id="username" name="username" class="form-control" required />
-                                        <label class="form-label" for="username">Username</label>
-                                    </div>
+        <div class="card-body p-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12">
+                    <h2 class="fw-bold mb-5">Sign in now</h2>
+                    <form method="post" action="/login">
+                        <!-- Username input -->
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input type="text" id="username" name="username" class="form-control" required/>
+                                    <label class="form-label" for="username">Username</label>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Password input -->
-                            <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="password" name="password" class="form-control" required />
-                                <label class="form-label" for="password">Password</label>
-                            </div>
+                        <!-- Password input -->
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <input type="password" id="password" name="password" class="form-control" required/>
+                            <label class="form-label" for="password">Password</label>
+                        </div>
 
-                            <!-- Checkbox -->
-                            <div class="form-check d-flex justify-content-center mb-4">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" />
-                                <label class="form-check-label" for="form2Example33">
-                                    Remember Me
-                                </label>
-                            </div>
+                        <!-- Checkbox -->
+                        <div class="form-check d-flex justify-content-center mb-4">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33"/>
+                            <label class="form-check-label" for="form2Example33">
+                                Remember Me
+                            </label>
+                        </div>
 
-                            <!-- Submit button -->
-                            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
-                                Sign in
-                            </button>
+                        <!-- Submit button -->
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init
+                                class="btn btn-primary btn-block mb-4">
+                            Sign in
+                        </button>
 
-                            {% if error %}
-                                <p class="text-danger">{{ error }}</p>
-                            {% endif %}
-                        </form>
-                    </div>
+                        {% if error %}
+                        <p class="text-danger">{{ error }}</p>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
 </body>
 </html>

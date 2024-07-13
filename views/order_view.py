@@ -1,4 +1,7 @@
-def render_order_details(order):
+from flask import render_template
+
+
+def track_order(order):
     return f"""
     <html>
     <head><title>Order Details</title></head>
@@ -13,14 +16,7 @@ def render_order_details(order):
     </html>
     """
 
-def render_all_orders(orders):
-    order_list = "".join([f"<li>{order.order_id} - {order.status}</li>" for order in orders])
-    return f"""
-    <html>
-    <head><title>All Orders</title></head>
-    <body>
-        <h1>All Orders</h1>
-        <ul>{order_list}</ul>
-    </body>
-    </html>
-    """
+
+def render_all_orders(orders, username):
+    print('order view user ', username)
+    return render_template('order_template.html', orders=orders, username=username)

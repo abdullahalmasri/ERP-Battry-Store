@@ -2,7 +2,11 @@ from models.supplier import Supplier
 
 class SupplierController:
     def __init__(self):
-        self.suppliers = []
+        self.suppliers = [
+            Supplier(supplier_id=1, name='Supplier One', contact_info='contact1@example.com', performance_rating=4.5),
+            Supplier(supplier_id=2, name='Supplier Two', contact_info='contact2@example.com', performance_rating=4.0),
+            Supplier(supplier_id=3, name='Supplier Three', contact_info='contact3@example.com', performance_rating=3.5)
+        ]
 
     def add_supplier(self, supplier):
         self.suppliers.append(supplier)

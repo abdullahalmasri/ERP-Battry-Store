@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template, jsonify
+from flask import Flask, request, redirect, url_for, session, jsonify, render_template, flash
 
 from controllers.battery_controller import BatteryController
 from controllers.order_controller import OrderController
@@ -9,8 +9,10 @@ from controllers.report_controller import ReportController
 from controllers.supplier_controller import SupplierController
 from controllers.user_controller import UserController
 from models.battery import Battery
+from models.remanufacturing_process import RemanufacturingProcess
+from models.supplier import Supplier
 from views.battery_view import render_battery_details, render_all_batteries
-from views.order_view import render_order_details, render_all_orders
+from views.order_view import render_all_orders
 from views.quality_view import render_inspection_details, render_all_inspections
 from views.recycling_view import render_process_details as render_recycling_details, \
     render_all_processes as render_all_recycling_processes
@@ -64,8 +66,8 @@ def dashboard(username):
     if 'username' not in session or session['username'] != username:
         return redirect(url_for('login'))
     print('i am the ', username)
-    battery = Battery(1, 'good', 1, 'cold')
-    battery_controller.add_battery(battery)
+    newBattery = Battery(1, 'good', 1, 'cold')
+    battery_controller.add_battery(newBattery)
     return render_dashboard_view(username, 'Hope have Great Day!')
 
 
@@ -83,49 +85,133 @@ def batteries():
 @app.route('/batteries/<int:battery_id>')
 def battery(battery_id):
     # username = request.args.get('username')
-    battery = battery_controller.find_battery_by_id(battery_id)
-    if battery:
-        return render_battery_details(battery)
+    getBattery = battery_controller.find_battery_by_id(battery_id)
+    if getBattery:
+        return render_battery_details(getBattery)
     return jsonify({"error": "Battery not found"}), 404
 
 
 @app.route('/suppliers')
 def suppliers():
-    return render_all_suppliers(supplier_controller.suppliers)
+    username = request.args.get('username')
+    return render_all_suppliers(supplier_controller.suppliers, username)
 
 
 @app.route('/suppliers/<int:supplier_id>')
 def supplier(supplier_id):
     supplier = supplier_controller.find_supplier_by_id(supplier_id)
     if supplier:
-        return render_supplier_details(supplier)
-    return "Supplier not found."
+        return jsonify(supplier.__dict__)
+    return jsonify({'message': 'Supplier not found'}), 404
 
 
 @app.route('/orders')
 def orders():
-    return render_all_orders(order_controller.orders)
+    username = request.args.get('username')
+    print(username)
+    return render_all_orders(order_controller.orders, username=username)
 
 
-@app.route('/orders/<int:order_id>')
-def order(order_id):
+@app.route('/suppliers', methods=['POST'])
+def add_supplier():
+    data = request.get_json()
+    new_supplier_id = len(supplier_controller.suppliers) + 1
+    new_supplier = Supplier(
+        supplier_id=new_supplier_id,
+        name=data['name'],
+        contact_info=data['contact_info'],
+        performance_rating=data['performance_rating']
+    )
+    supplier_controller.add_supplier(new_supplier)
+    return jsonify({'message': 'Supplier added successfully'}), 200
+
+
+@app.route('/order', methods=['POST'])
+def add_order():
+    data = request.get_json()
+    order_controller.place_order(data)
+    return jsonify({'message': 'Order added successfully'}), 200
+
+
+@app.route('/update_order_status', methods=['POST'])
+def update_order_status():
+    data = request.get_json()
+    order_id = data.get('order_id')
+    new_status = data.get('status')
     order = order_controller.find_order_by_id(order_id)
     if order:
-        return render_order_details(order)
-    return "Order not found."
+        order.update_order_status(new_status)
+        return jsonify({'message': 'Order status updated successfully'}), 200
+    else:
+        return jsonify({'error': 'Order not found'}), 404
+
+
+@app.route('/track_order', methods=['POST'])
+def track_order():
+    data = request.get_json()
+    order_id = data.get('order_id')
+    order = order_controller.find_order_by_id(order_id)
+    if order:
+        newDate = order.track_delivery()
+        return jsonify({'date': newDate}), 200
+    else:
+        return jsonify({'error': 'Order not found'}), 404
+
+
+@app.route('/suppliers/<int:supplier_id>', methods=['PUT'])
+def update_supplier(supplier_id):
+    data = request.get_json()
+    supplier_controller.update_supplier(
+        supplier_id=supplier_id,
+        name=data['name'],
+        contact_info=data['contact_info'],
+        performance_rating=data['performance_rating']
+    )
+    return jsonify({'message': 'Supplier updated successfully'}), 200
 
 
 @app.route('/remanufacturing_processes')
 def remanufacturing_processes():
-    return render_all_remanufacturing_processes(remanufacturing_controller.processes)
+    username = request.args.get('username')
+    print(username)
+    return render_all_remanufacturing_processes(remanufacturing_controller.processes, username)
 
 
 @app.route('/remanufacturing_processes/<int:process_id>')
 def remanufacturing_process(process_id):
     process = remanufacturing_controller.find_process_by_id(process_id)
     if process:
-        return render_remanufacturing_details(process)
+        return jsonify(process.__dict__)
     return "Remanufacturing process not found."
+
+
+@app.route('/remanufacturing_processes/update/<int:process_id>', methods=['PUT'])
+def update_remanufacturing_process(process_id):
+    data = request.get_json()
+    remanufacturing_processes = RemanufacturingProcess(
+        process_id=process_id,
+        battery_id=data['battery_id'],
+        start_date=data['start_date'],
+        end_date=data['end_date'],
+        status=data['status']
+    )
+    remanufacturing_controller.update_process(remanufacturing_processes)
+    return jsonify({'message': 'Remanufacturing process updated successfully'}), 200
+
+
+@app.route('/add_remanufacturing_process', methods=['POST'])
+def add_process():
+    data = request.get_json()
+    new_process_id = len(remanufacturing_controller.processes) + 1
+    new_remanufacturing = RemanufacturingProcess(
+        process_id=new_process_id,
+        battery_id=int(data['battery_id']),
+        start_date=data['start_date'],
+        end_date=data['end_date'],
+        status=data['status']
+    )
+    remanufacturing_controller.schedule_process(new_remanufacturing)
+    return jsonify({'message': 'Remanufacturing process scheduled successfully'}), 200
 
 
 @app.route('/recycling_processes')
@@ -161,10 +247,28 @@ def reports():
 
 @app.route('/reports/<int:report_id>')
 def report(report_id):
-    report = report_controller.find_report_by_id(report_id)
-    if report:
-        return render_report_details(report)
+    getReport = report_controller.find_report_by_id(report_id)
+    if getReport:
+        return render_report_details(getReport)
     return "Report not found."
+
+
+@app.route('/aboutUs/<username>')
+def about_us(username):
+    return render_template('aboutUs.html', username=username)
+
+
+@app.route('/contactUs/<username>', methods=['GET', 'POST'])
+def contact_us(username):
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        # Here you would normally handle the form submission,
+        # such as sending an email or saving the feedback to a database.
+        flash('Your message has been sent successfully!', 'success')
+        return redirect(url_for('contact_us', username=username))
+    return render_template('contactUs.html', username=username)
 
 
 @app.route('/logout')

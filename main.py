@@ -9,17 +9,16 @@ from controllers.report_controller import ReportController
 from controllers.supplier_controller import SupplierController
 from controllers.user_controller import UserController
 from models.battery import Battery
+from models.recycling_process import RecyclingProcess
 from models.remanufacturing_process import RemanufacturingProcess
 from models.supplier import Supplier
 from views.battery_view import render_battery_details, render_all_batteries
 from views.order_view import render_all_orders
 from views.quality_view import render_inspection_details, render_all_inspections
-from views.recycling_view import render_process_details as render_recycling_details, \
-    render_all_processes as render_all_recycling_processes
-from views.remanufacturing_view import render_process_details as render_remanufacturing_details, \
-    render_all_processes as render_all_remanufacturing_processes
+from views.recycling_view import render_all_processes as render_all_recycling_processes
+from views.remanufacturing_view import render_all_processes as render_all_remanufacturing_processes
 from views.report_view import render_report_details, render_all_reports
-from views.supplier_view import render_supplier_details, render_all_suppliers
+from views.supplier_view import render_all_suppliers
 from views.user_view import render_login_view, render_dashboard_view
 
 app = Flask(__name__, template_folder='views')  # Ensure the template folder is 'views'
@@ -216,15 +215,39 @@ def add_process():
 
 @app.route('/recycling_processes')
 def recycling_processes():
-    return render_all_recycling_processes(recycling_controller.processes)
+    username = request.args.get('username')
+    processes = [process.__dict__ for process in recycling_controller.processes]
+    return render_all_recycling_processes(processes, username)
 
 
 @app.route('/recycling_processes/<int:process_id>')
 def recycling_process(process_id):
     process = recycling_controller.find_process_by_id(process_id)
     if process:
-        return render_recycling_details(process)
-    return "Recycling process not found."
+        return jsonify(process.__dict__)
+    return jsonify({"message": "Recycling process not found."}), 404
+
+
+@app.route('/recycling_processes', methods=['POST'])
+def add_recycling_process():
+    data = request.json
+    new_process = RecyclingProcess(
+        process_id=data['process_id'],
+        battery_id=data['battery_id'],
+        start_date=data['start_date'],
+        end_date=data['end_date'],
+        status=data['status']
+    )
+    recycling_controller.plan_process(new_process)
+    return jsonify({"message": "Recycling process added successfully."})
+
+
+@app.route('/recycling_processes/<int:process_id>', methods=['PUT'])
+def update_recycling_process(process_id):
+    data = request.json
+    status = data['status']
+    recycling_controller.update_process_status(process_id, status)
+    return jsonify({"message": "Recycling process updated successfully."})
 
 
 @app.route('/inspections')

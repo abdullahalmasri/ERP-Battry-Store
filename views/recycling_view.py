@@ -1,3 +1,6 @@
+from flask import render_template
+
+
 def render_process_details(process):
     return f"""
     <html>
@@ -12,14 +15,6 @@ def render_process_details(process):
     </html>
     """
 
-def render_all_processes(processes):
-    process_list = "".join([f"<li>{process.process_id} - {process.status}</li>" for process in processes])
-    return f"""
-    <html>
-    <head><title>All Processes</title></head>
-    <body>
-        <h1>All Processes</h1>
-        <ul>{process_list}</ul>
-    </body>
-    </html>
-    """
+
+def render_all_processes(processes, username):
+    return render_template('recycling_template.html', processes=processes, username=username)

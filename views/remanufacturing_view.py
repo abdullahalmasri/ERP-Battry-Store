@@ -16,5 +16,5 @@ def render_process_details(process):
     """
 
 
-def render_all_processes(processes, username):
-    return render_template('remanufacturing_template.html', processes=processes, username=username)
+def render_all_processes(user, processes, username):
+    return render_template('remanufacturing_template.html',user=user, processes=processes, username=username)

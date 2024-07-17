@@ -15,5 +15,5 @@ def render_supplier_details(supplier):
     """
 
 
-def render_all_suppliers(suppliers, username):
-    return render_template('supplier_template.html', suppliers=suppliers, username=username)
+def render_all_suppliers(user, suppliers, username):
+    return render_template('supplier_template.html', user=user, suppliers=suppliers, username=username)

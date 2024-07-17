@@ -17,6 +17,6 @@ def track_order(order):
     """
 
 
-def render_all_orders(orders, username):
+def render_all_orders(user, orders, username):
     print('order view user ', username)
-    return render_template('order_template.html', orders=orders, username=username)
+    return render_template('order_template.html', user=user, orders=orders, username=username)

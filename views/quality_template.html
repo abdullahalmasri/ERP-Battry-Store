@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Control Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="https://icon-library.com/images/full-battery-icon/full-battery-icon-7.jpg">
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+        }
+
+        .navbar {
+            background-color: #171717;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+
+        .navbar-brand {
+            color: white !important;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .card {
+            background-color: #333;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-menu {
+            background: #171717;
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown-menu .dropdown-item {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">ERP System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard/{{ username }}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/aboutUs/{{ username }}">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contactUs/{{ username }}">Contact Us</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto d-flex align-items-center">
+            <!-- Avatar -->
+            <div class="dropdown">
+                <a
+                        data-toggle="dropdown"
+                        class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                        href="#"
+                        id="navbarDropdownMenuAvatar"
+                        role="button"
+                        aria-expanded="false"
+                >
+                    <img
+                            src="{{ user.profile_pic_url }}"
+                            class="rounded-circle"
+                            height="25"
+                            alt="User Avatar"
+                            loading="lazy"
+                    />
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuAvatar">
+                    <li><a class="dropdown-item" href="/profile/{{ username }}">My profile</a></li>
+                    <li><a class="dropdown-item" href="/logout?username={{ username }}">Logout</a></li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Add new Quality Control</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Place an Order</h5>
+            <form id="qualityForm">
+                <div class="form-group">
+                    <label for="battery_id">Battery Id</label>
+                    <input type="text" class="form-control" id="battery_id" required>
+                </div>
+                <div class="form-group">
+                    <label for="inspection_date">Inspection Date</label>
+                    <input type="date" class="form-control" id="inspection_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="inspection_result">Inspection Result</label>
+                    <div class="form-check" id="inspection_result">
+                        <input class="form-check-input" type="radio" name="inspection_result"
+                               id="inspection_result_fail" value="fail" required>
+                        <label class="form-check-label" for="inspection_result_fail">Fail</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="inspection_result"
+                               id="inspection_result_pass" value="pass" required>
+                        <label class="form-check-label" for="inspection_result_pass">Pass</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="issues">Issues</label>
+                    <input type="text" class="form-control" id="issues" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="addQualityControl()">Perform Inspection</button>
+            </form>
+        </div>
+    </div>
+
+    <h1>Quality Control Details</h1>
+    <!-- Quality Control Details -->
+    <div class="card mt-5" id="orders">
+        <div class="card-body">
+            <h5 class="card-title">Quality Control List</h5>
+            <table class="table table-dark table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Quality Control ID</th>
+                    <th scope="col">Battery ID</th>
+                    <th scope="col">Inspection Date</th>
+                    <th scope="col">Inspection Result</th>
+                    <th scope="col">Issues</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="QualityControlList">
+                {% for q in qc %}
+                <tr>
+                    <td>{{ q.qc_id }}</td>
+                    <td>{{ q.battery_id }}</td>
+                    <td>{{ q.inspection_date }}</td>
+                    <td>{{ q.results }}</td>
+                    <td>{{ q.issues }}</td>
+                    <td>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#updateQualityControlModal"
+                                onclick="showUpdateQualityControlForm('{{ q.qc_id }}')">Update
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Update Quality Control Process Modal -->
+<div class="modal fade" id="updateQualityControlModal" tabindex="-1" role="dialog"
+     aria-labelledby="updateQualityControlModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateQualityControlModalLabel">Update Quality Control Process</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateQualityControlForm">
+                    <input type="text" class="form-control" id="updateQualityControlId" disabled>
+                    <div class="form-group">
+                        <label for="updateBatteryId">Battery ID</label>
+                        <input type="text" class="form-control" id="updateBatteryId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateInspectionDate">Inspection Date</label>
+                        <input type="date" class="form-control" id="updateInspectionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Results</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="updateResults" id="updateResultsPass"
+                                   value="Pass" required>
+                            <label class="form-check-label" for="updateResultsPass">
+                                Pass
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="updateResults" id="updateResultsFail"
+                                   value="Fail" required>
+                            <label class="form-check-label" for="updateResultsFail">
+                                Fail
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateIssues">Issues</label>
+                        <input type="text" class="form-control" id="updateIssues" required>
+                    </div>
+                    <button class="btn btn-primary" onclick="updateQualityControl(event)">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function getUsernameFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('username');
+    }
+
+    function addQualityControl() {
+        const batteryId = document.getElementById('battery_id').value;
+        const inspectionDate = document.getElementById('inspection_date').value;
+        const inspectionResult = document.querySelector('input[name="inspection_result"]:checked').value;
+        const issues = document.getElementById('issues').value;
+        const username = getUsernameFromURL();
+
+        const data = new FormData();
+        data.append('battery_id', batteryId);
+        data.append('inspection_date', inspectionDate);
+        data.append('inspection_result', inspectionResult);
+        data.append('issues', issues);
+        console.log(data);
+
+        fetch(`/quality_controls/${username}`, {
+            method: 'POST',
+            body: data
+        })
+            .then(response => response.text())
+            .then(responseText => {
+                // console.log(responseText);
+                location.reload();
+                // Optionally redirect or show a success message
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function showUpdateQualityControlForm(qcId) {
+        fetch('/quality_controls/' + qcId)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    document.getElementById('updateQualityControlId').value = qcId;
+                    document.getElementById('updateBatteryId').value = data.battery_id;
+                    document.getElementById('updateInspectionDate').value = data.inspection_date;
+                    // Set the results radio button
+                    if (data.results === "Pass") {
+                        document.getElementById('updateResultsPass').checked = true;
+                    } else if (data.results === "Fail") {
+                        document.getElementById('updateResultsFail').checked = true;
+                    }
+                    // document.getElementById('updateResults').value = data.results;
+                    document.getElementById('updateIssues').value = data.issues;
+                    $('#updateQualityControlModal').modal('show');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function updateQualityControl(event) {
+        event.preventDefault();
+
+        const qcId = document.getElementById('updateQualityControlId').value;
+        const qcData = {
+            battery_id: document.getElementById('updateBatteryId').value,
+            inspection_date: document.getElementById('updateInspectionDate').value,
+            results: document.querySelector('input[name="updateResults"]:checked').value,
+            issues: document.getElementById('updateIssues').value
+        };
+        console.log(qcData)
+        const username = getUsernameFromURL();
+        fetch(`/quality_controls/${username}/` + qcId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(qcData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Quality control process updated successfully') {
+                    alert('Quality control process updated successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to update quality control process');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+</script>
+</body>
+</html>

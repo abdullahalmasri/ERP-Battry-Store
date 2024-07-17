@@ -10,6 +10,5 @@ def render_battery_details(battery):
         })
 
 
-def render_all_batteries(batteries, username):
-    print("user :-> ", username)
-    return render_template('battery_Storage.html', batteries=batteries, username=username)
+def render_all_batteries(user, batteries, username):
+    return render_template('battery_Storage.html', user=user, batteries=batteries, username=username)

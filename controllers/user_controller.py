@@ -13,11 +13,18 @@ class UserController:
             raise ValueError(f"User with username '{username}' already exists.")
         self.users.append(User(user_id, username, password, role))
 
-    # def login_user(self, username, password):
-    #     user = self.users.get(username)
-    #     if user and user.verify_password(password):
-    #         return f"Login successful for {username}."
-    #     return "Invalid username or password."
+    def get_user(self, username):
+        for user in self.users:
+            if user.username == username:
+                return user
+        return None
+
+    def update_user(self, user):
+        for i, u in enumerate(self.users):
+            if u.username == user.username:
+                self.users[i] = user
+                return "User updated"
+        return "User not found"
 
     def logout_user(self, username):
         if username in self.users:

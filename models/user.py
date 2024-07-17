@@ -1,11 +1,13 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 class User:
-    def __init__(self, user_id, username, password, role):
+    def __init__(self, user_id, username, password, role, profile_pic_url=None):
         self.user_id = user_id
         self.username = username
         self.password_hash = generate_password_hash(password)
         self.role = role
+        self.profile_pic_url = profile_pic_url
 
     def login(self, username, password):
         if self.username == username and self.password == password:

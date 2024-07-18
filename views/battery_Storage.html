@@ -122,11 +122,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Battery ID: {{ battery.battery_id }}</h5>
                     <p class="card-text">Status: {{ battery.status }}</p>
-                    <!--                    <p class="card-text">Quantity: {{ battery.quantity }}</p>-->
-                    <!--                    <p class="card-text">Storage Conditions: {{ battery.storage_conditions }}</p>-->
+                    {% if user.role == "user" or user.role == "admin" %}
                     <button class="btn btn-primary" data-toggle="modal" data-target="#batteryModal"
                             onclick="loadBatteryDetails('{{ battery.battery_id }}')">Describe
                     </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -149,7 +149,9 @@
             <div class="modal-body">
                 <p><strong>Status:</strong> <span id="batteryStatus"></span></p>
                 <p><strong>Quantity:</strong> <span id="batteryQuantity"></span></p>
+                {% if user.role == "admin" %}
                 <p><strong>Storage Conditions:</strong> <span id="batteryStorage"></span></p>
+                {% endif %}
                 <p><strong>Description:</strong> Detailed information about the battery, including specifications,
                     usage, and other relevant details.</p>
             </div>

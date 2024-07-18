@@ -111,7 +111,7 @@
         <hr class="my-4">
         <p>Use the navigation bar to explore the different sections of the ERP system.</p>
     </div>
-
+    {% if user.role == "admin" %}
     <div class="row">
         <!-- Battery Card -->
         <div class="col-md-4">
@@ -191,6 +191,17 @@
             </div>
         </div>
     </div>
+    {% else %}
+      <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Battery</h5>
+                    <p class="card-text">Manage battery details including status, quantity, and storage conditions.</p>
+                    <a href="/batteries?username={{ username }}" class="btn btn-primary">Go to Batteries</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

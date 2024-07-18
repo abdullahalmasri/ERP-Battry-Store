@@ -5,7 +5,8 @@ class UserController:
     def __init__(self):
         self.users = [
             User(1, "admin", "admin123", "admin"),
-            User(2, "john_doe", "password456", "user")
+            User(2, "jo", "111", "user"),
+            User(2, "sup", "123", "supplier")
         ]
 
     def add_user(self, user_id, username, password, role):

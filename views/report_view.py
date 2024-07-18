@@ -1,3 +1,6 @@
+from flask import render_template
+
+
 def render_report_details(report):
     return f"""
     <html>
@@ -11,14 +14,5 @@ def render_report_details(report):
     </html>
     """
 
-def render_all_reports(reports):
-    report_list = "".join([f"<li>{report.report_id} - {report.report_type}</li>" for report in reports])
-    return f"""
-    <html>
-    <head><title>All Reports</title></head>
-    <body>
-        <h1>All Reports</h1>
-        <ul>{report_list}</ul>
-    </body>
-    </html>
-    """
+def render_all_reports(user, reports, username):
+    return render_template("report_template.html", user=user, reports=reports, username=username)

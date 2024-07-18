@@ -11,24 +11,30 @@
             background-color: #212121;
             color: white;
         }
+
         .navbar {
             background-color: #171717;
         }
+
         .navbar-nav .nav-link {
             color: white !important;
         }
+
         .navbar-brand {
             color: white !important;
         }
+
         .jumbotron {
             background-color: #333;
             color: white;
         }
+
         .card {
             background-color: #333;
             color: white;
             margin-bottom: 20px;
         }
+
         .form-control {
             background-color: #555;
             color: white;
@@ -39,7 +45,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <a class="navbar-brand" href="#">ERP System</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -51,13 +58,28 @@
                 <a class="nav-link" href="/aboutUs/{{ username }}">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/contactUs/{{ username }}">Contact Us <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/contactUs/{{ username }}">Contact Us <span
+                        class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto d-flex align-items-center">
             <div class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
-                    <img src="{{ user.profile_pic_url }}" class="rounded-circle" height="25" alt="User Avatar" loading="lazy"/>
+                <a data-toggle="dropdown" class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                   id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                    {% if user.profile_pic_url %}
+                    <img
+                            src="{{ user.profile_pic_url }}"
+                            class="rounded-circle"
+                            height="25"
+                            alt="User Avatar"
+                            loading="lazy"
+                    />
+                    {% else %}
+                    <img src="https://cdn-icons-png.freepik.com/512/266/266033.png" class="rounded-circle"
+                         height="25"
+                         alt="User Avatar"
+                         loading="lazy">
+                    {% endif %}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuAvatar">
                     <li><a class="dropdown-item" href="/profile/{{ username }}">My profile</a></li>
@@ -73,19 +95,20 @@
     <div class="jumbotron">
         <h2 class="text-center">Get in Touch</h2>
         <p class="lead text-center">
-            We'd love to hear from you. Fill out the form below to send us a message, or find our contact information and location.
+            We'd love to hear from you. Fill out the form below to send us a message, or find our contact information
+            and location.
         </p>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
-                {{ messages[0][1] }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
+        {{ messages[0][1] }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
     {% endwith %}
 
     <div class="row">
@@ -137,7 +160,7 @@
 <script>
     // Initialize and add the map (replace YOUR_API_KEY with your actual API key)
     function initMap() {
-        var location = { lat: -34.397, lng: 150.644 };
+        var location = {lat: -34.397, lng: 150.644};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 8,
             center: location

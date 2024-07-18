@@ -87,6 +87,7 @@
                         role="button"
                         aria-expanded="false"
                 >
+                    {% if user.profile_pic_url %}
                     <img
                             src="{{ user.profile_pic_url }}"
                             class="rounded-circle"
@@ -94,6 +95,12 @@
                             alt="User Avatar"
                             loading="lazy"
                     />
+                    {% else %}
+                    <img src="https://cdn-icons-png.freepik.com/512/266/266033.png" class="rounded-circle"
+                            height="25"
+                            alt="User Avatar"
+                            loading="lazy">
+                    {% endif %}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuAvatar">
                     <li><a class="dropdown-item" href="/profile/{{ username }}">My profile</a></li>

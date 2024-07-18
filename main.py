@@ -306,15 +306,17 @@ def update_quality_control(username, qc_id):
 # Reports
 @app.route('/reports')
 def reports():
-    return render_all_reports(report_controller.reports)
-
+    username = request.args.get('username')
+    user = user_controller.get_user(username)
+    data = report_controller.reports
+    return render_all_reports(user, data, username)
 
 @app.route('/reports/<int:report_id>')
 def report(report_id):
-    getReport = report_controller.find_report_by_id(report_id)
-    if getReport:
-        return render_report_details(getReport)
-    return "Report not found."
+    report = report_controller.find_report_by_id(report_id)
+    if report:
+        return jsonify(report.__dict__)
+    return "Report not found.", 404
 
 
 # About us

@@ -18,7 +18,7 @@ from views.order_view import render_all_orders
 from views.quality_view import render_all_inspections
 from views.recycling_view import render_all_processes as render_all_recycling_processes
 from views.remanufacturing_view import render_all_processes as render_all_remanufacturing_processes
-from views.report_view import render_report_details, render_all_reports
+from views.report_view import render_all_reports
 from views.supplier_view import render_all_suppliers
 from views.user_view import render_login_view, render_dashboard_view
 

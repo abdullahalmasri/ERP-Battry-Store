@@ -7,8 +7,14 @@ class ReportController:
             Report(1, "Sales", "2023-07-17",
                    [{"total_sales": 10000, "region": "North America"}, {"total_sales": 2000, "region": "South America"},
                     {"total_sales": 1500, "region": "Middle America"}]),
-            Report(2, "Inventory", "2023-07-18", {"total_items": 5000, "warehouse": "Warehouse A"}),
-            Report(3, "Performance", "2023-07-19", {"employee_id": 123, "rating": "A"}),
+            Report(2, "Inventory", "2023-07-18",
+                   [{"total_items": 5000, "warehouse": "Warehouse A"},
+                    {"total_items": 1000, "warehouse": "Warehouse B"},
+                    {"total_items": 220000, "warehouse": "Warehouse C"}
+                    ]),
+            Report(3, "Performance", "2023-07-19", [{"employee_id": 123, "rating": "A"},
+                                                    {"employee_id": 9909, "rating": "B"},
+                                                    {"employee_id": 202, "rating": "C"}]),
         ]
 
     def generate_report(self, report):

@@ -131,7 +131,7 @@
                 </div>
                 <div class="form-group">
                     <label for="performance_rating">Performance Rating</label>
-                    <input type="number" class="form-control" id="performance_rating" required>
+                    <input type="number" class="form-control" id="performance_rating" min="0" required>
                 </div>
                 <button class="btn btn-primary" onclick="addSupplier(event)">Add Supplier</button>
             </form>
@@ -193,7 +193,7 @@
                         </div>
                         <div class="form-group">
                             <label for="updatePerformanceRating">Performance Rating</label>
-                            <input type="number" class="form-control" id="updatePerformanceRating" required>
+                            <input type="number" class="form-control" min="0" id="updatePerformanceRating" required>
                         </div>
                         <button class="btn btn-primary" onclick="updateSupplier(event)">Save changes</button>
                     </form>
